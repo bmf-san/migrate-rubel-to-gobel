@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  gobeldb:
+    platform: linux/x86_64 # For M1
+    image: mysql:8.0.26
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gobel
+      MYSQL_USER: gobel
+      MYSQL_PASSWORD: password
+      TZ: "Asia/Tokyo"
+    command: mysqld
+    ports:
+      - 3308:3306
+    volumes:
+      - ./mysql/gobel/conf.d:/etc/mysql/conf.d
+      - ./mysql/gobel/initdb.d:/docker-entrypoint-initdb.d
+  rubeldb:
+    platform: linux/x86_64 # For M1
+    image: mysql/mysql-server:5.7.22 
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rubel
+      MYSQL_USER: rubel
+      MYSQL_PASSWORD: password
+      TZ: "Asia/Tokyo"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3309:3306
+    volumes:
+      - ./mysql/rubel/initdb.d:/docker-entrypoint-initdb.d
+networks:
+  overlay:
